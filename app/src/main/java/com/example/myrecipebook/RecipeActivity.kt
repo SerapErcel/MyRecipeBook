@@ -37,6 +37,29 @@ class RecipeActivity : AppCompatActivity() {
     }
 
     fun saveButtonClicked(view: View) {
+        val recipeName = binding.recipeNameText.text.toString()
+        val time = binding.timeText.text.toString()
+        val description = binding.recipeDescriptionText.text.toString()
+        if (selectedBitmap != null) {
+            val smallBitmap = makeSmallerBitmap(selectedBitmap!!, 300)
+        }
+    }
+
+    private fun makeSmallerBitmap(image: Bitmap, maximumSize: Int): Bitmap {
+        var width = image.width
+        var height = image.height
+        val bitmapRatio: Double = width.toDouble() / height.toDouble()
+        if (bitmapRatio > 1) {
+            width = maximumSize
+            val scaleHeight = width / bitmapRatio
+            height = scaleHeight.toInt()
+        } else {
+            height = maximumSize
+            val scaleWidth = height * bitmapRatio
+            width = scaleWidth.toInt()
+
+        }
+        return Bitmap.createScaledBitmap(image, width, height, true)
 
     }
 
@@ -51,8 +74,8 @@ class RecipeActivity : AppCompatActivity() {
                     Manifest.permission.READ_EXTERNAL_STORAGE
                 )
             ) {
-                Snackbar.make(view, "Permission needen for gallery!", Snackbar.LENGTH_INDEFINITE)
-                    .setAction("Give Permisson", View.OnClickListener {
+                Snackbar.make(view, "Permission needed for gallery!", Snackbar.LENGTH_INDEFINITE)
+                    .setAction("Give Permission", View.OnClickListener {
                         //Request permission
                         permissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
 
