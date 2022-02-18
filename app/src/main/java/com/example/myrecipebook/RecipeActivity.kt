@@ -17,6 +17,8 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.myrecipebook.databinding.ActivityRecipeBinding
 import com.google.android.material.snackbar.Snackbar
+import java.io.ByteArrayInputStream
+import java.io.ByteArrayOutputStream
 import java.lang.Exception
 
 class RecipeActivity : AppCompatActivity() {
@@ -42,6 +44,26 @@ class RecipeActivity : AppCompatActivity() {
         val description = binding.recipeDescriptionText.text.toString()
         if (selectedBitmap != null) {
             val smallBitmap = makeSmallerBitmap(selectedBitmap!!, 300)
+            val outputStream = ByteArrayOutputStream()
+            smallBitmap.compress(Bitmap.CompressFormat.PNG, 50, outputStream)
+            val byteArray = outputStream.toByteArray()
+
+            try {
+                val database = this.openOrCreateDatabase("Recipes", MODE_PRIVATE, null)
+                database.execSQL("CREATE TABLE IF NOT EXISTS recipes ( id INTEGER PRIMARY KEY, recipeName VARCHAR, time VARCHAR, description VARCHAR, image BLOB)")
+
+                val sqlString =" INSERT INTO recipes (recipeName, time, description, image) VALUES (?, ?, ? ,?) "
+                val statement = database.compileStatement(sqlString)
+                statement.bindString(1, recipeName)
+                statement.bindString(2, time)
+                statement.bindString(3, description)
+                statement.bindBlob(4,byteArray)
+                statement.execute()
+
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+
         }
     }
 
