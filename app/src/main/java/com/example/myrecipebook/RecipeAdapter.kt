@@ -21,6 +21,8 @@ class RecipeAdapter(val recipeList: ArrayList<Recipe>) :
         holder.binding.recyclerViewTextView.text = recipeList.get(position).name
         holder.itemView.setOnClickListener {
             val intent = Intent(holder.itemView.context, RecipeActivity::class.java)
+            intent.putExtra("info", "old")
+            intent.putExtra("id", recipeList.get(position).id )
             holder.itemView.context.startActivity(intent)
         }
     }

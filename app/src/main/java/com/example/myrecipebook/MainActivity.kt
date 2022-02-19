@@ -16,7 +16,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var recipeList: ArrayList<Recipe>
     private lateinit var recipeAdapter: RecipeAdapter
 
-    @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -58,6 +57,7 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.add_recipe_item) {
             val intent = Intent(this@MainActivity, RecipeActivity::class.java)
+            intent.putExtra("info", "new")
             startActivity(intent)
         }
         return super.onOptionsItemSelected(item)

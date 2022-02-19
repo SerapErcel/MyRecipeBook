@@ -3,7 +3,9 @@ package com.example.myrecipebook
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.database.sqlite.SQLiteDatabase
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -26,6 +28,8 @@ class RecipeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRecipeBinding
     private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
     private lateinit var permissionLauncher: ActivityResultLauncher<String>
+    private lateinit var database: SQLiteDatabase
+
     var selectedBitmap: Bitmap? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,7 +38,44 @@ class RecipeActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
+        database = this.openOrCreateDatabase("Recipes", MODE_PRIVATE, null)
+
         registerLauncher()
+        val intent = intent
+        val info = intent.getStringExtra("info")
+        if (info != null) {
+            if (info.equals("new")) {
+                binding.recipeNameText.setText("")
+                binding.recipeDescriptionText.setText("")
+                binding.timeText.setText("")
+                binding.button.visibility = View.VISIBLE
+                binding.imageView.setImageResource(R.drawable.select)
+            } else {
+                binding.button.visibility = View.INVISIBLE
+                val selectedId = intent.getIntExtra("id", 1)
+
+                val cursor =
+                    database.rawQuery(
+                        "SELECT * FROM recipes WHERE id =?",
+                        arrayOf(selectedId.toString())
+                    )
+
+                val recipeNameIx = cursor.getColumnIndex("recipeName")
+                val timeIx = cursor.getColumnIndex("time")
+                val descriptionIx = cursor.getColumnIndex("description")
+                val imageIx = cursor.getColumnIndex("image")
+                while (cursor.moveToNext()) {
+                    binding.recipeNameText.setText(cursor.getString(recipeNameIx))
+                    binding.timeText.setText(cursor.getString(timeIx))
+                    binding.recipeDescriptionText.setText(cursor.getString(descriptionIx))
+
+                    val byteArray = cursor.getBlob(imageIx)
+                    val bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
+                    binding.imageView.setImageBitmap(bitmap)
+                }
+                cursor.close()
+            }
+        }
 
     }
 
@@ -49,15 +90,15 @@ class RecipeActivity : AppCompatActivity() {
             val byteArray = outputStream.toByteArray()
 
             try {
-                val database = this.openOrCreateDatabase("Recipes", MODE_PRIVATE, null)
                 database.execSQL("CREATE TABLE IF NOT EXISTS recipes ( id INTEGER PRIMARY KEY, recipeName VARCHAR, time VARCHAR, description VARCHAR, image BLOB)")
 
-                val sqlString =" INSERT INTO recipes (recipeName, time, description, image) VALUES (?, ?, ? ,?) "
+                val sqlString =
+                    " INSERT INTO recipes (recipeName, time, description, image) VALUES (?, ?, ? ,?) "
                 val statement = database.compileStatement(sqlString)
                 statement.bindString(1, recipeName)
                 statement.bindString(2, time)
                 statement.bindString(3, description)
-                statement.bindBlob(4,byteArray)
+                statement.bindBlob(4, byteArray)
                 statement.execute()
 
             } catch (e: Exception) {
