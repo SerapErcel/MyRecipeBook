@@ -1,5 +1,6 @@
 package com.example.myrecipebook
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -15,6 +16,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var recipeList: ArrayList<Recipe>
     private lateinit var recipeAdapter: RecipeAdapter
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -25,7 +27,25 @@ class MainActivity : AppCompatActivity() {
         recipeAdapter = RecipeAdapter(recipeList)
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
         binding.recyclerView.adapter = recipeAdapter
-        pullData()
+
+        try {
+            val database = this.openOrCreateDatabase("Recipes", MODE_PRIVATE, null)
+            val cursor = database.rawQuery("SELECT * FROM recipes", null)
+            val recipeNameIx = cursor.getColumnIndex("recipeName")
+            val idIx = cursor.getColumnIndex("id")
+
+            while (cursor.moveToNext()) {
+                val name = cursor.getString(recipeNameIx)
+                val id = cursor.getInt(idIx)
+                val recipe = Recipe(name, id)
+                recipeList.add(recipe)
+            }
+            recipeAdapter.notifyDataSetChanged()
+            cursor.close()
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -43,24 +63,5 @@ class MainActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    fun pullData() {
-        try {
-            val database = this.openOrCreateDatabase("Recipes", MODE_PRIVATE, null)
-            val cursor = database.rawQuery("SELECT * FROM recipes", null)
-            val recipeNameIx = cursor.getColumnIndex("recipename")
-            val idIx = cursor.getColumnIndex("id")
 
-            while (cursor.moveToNext()) {
-                val name = cursor.getString(recipeNameIx)
-                val id = cursor.getInt(idIx)
-                val recipe = Recipe(name, id)
-                recipeList.add(recipe)
-            }
-            recipeAdapter.notifyDataSetChanged()
-            cursor.close()
-
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
 }
