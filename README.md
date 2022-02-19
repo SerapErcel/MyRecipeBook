@@ -16,7 +16,6 @@ I used and learned
 - ActivityCompat,
 - ContextCompat,
 
-![ss1](https://user-images.githubusercontent.com/57289819/154821904-2cbab0d7-775f-43ad-9cd0-870356c40199.jpg)
 ![ss2](https://user-images.githubusercontent.com/57289819/154821905-bd3d479c-77df-473a-9dc1-f115a2d34aa5.jpg)
 ![ss4](https://user-images.githubusercontent.com/57289819/154821909-48df76ee-6725-4d4a-977f-52b8a1bd6d59.jpg)
 ![ss3](https://user-images.githubusercontent.com/57289819/154821907-a503050f-d95d-422d-84c5-8dd469855b82.jpg)
