@@ -19,7 +19,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.myrecipebook.databinding.ActivityRecipeBinding
 import com.google.android.material.snackbar.Snackbar
-import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.lang.Exception
 
@@ -48,10 +47,10 @@ class RecipeActivity : AppCompatActivity() {
                 binding.recipeNameText.setText("")
                 binding.recipeDescriptionText.setText("")
                 binding.timeText.setText("")
-                binding.button.visibility = View.VISIBLE
+                binding.buttonSave.visibility = View.VISIBLE
                 binding.imageView.setImageResource(R.drawable.select)
             } else {
-                binding.button.visibility = View.INVISIBLE
+                binding.buttonSave.visibility = View.INVISIBLE
                 val selectedId = intent.getIntExtra("id", 1)
 
                 val cursor =
@@ -77,9 +76,13 @@ class RecipeActivity : AppCompatActivity() {
             }
         }
 
+        binding.buttonSave.setOnClickListener {
+            saveButtonClicked()
+        }
+
     }
 
-    fun saveButtonClicked(view: View) {
+    private fun saveButtonClicked() {
         val recipeName = binding.recipeNameText.text.toString()
         val time = binding.timeText.text.toString()
         val description = binding.recipeDescriptionText.text.toString()
@@ -101,6 +104,9 @@ class RecipeActivity : AppCompatActivity() {
                 statement.bindBlob(4, byteArray)
                 statement.execute()
 
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+                finish()
             } catch (e: Exception) {
                 e.printStackTrace()
             }

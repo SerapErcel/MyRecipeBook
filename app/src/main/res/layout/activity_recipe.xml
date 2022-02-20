@@ -21,9 +21,11 @@
 
     <EditText
         android:id="@+id/recipeNameText"
-        android:layout_width="341dp"
+        android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_marginTop="32dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
         android:ems="10"
         android:hint="Recipe Name"
         android:inputType="textPersonName"
@@ -57,10 +59,9 @@
         app:layout_constraintTop_toBottomOf="@+id/timeText" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/buttonSave"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="saveButtonClicked"
         android:text="Save"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

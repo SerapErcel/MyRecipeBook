@@ -5,10 +5,11 @@
       <map>
         <entry key="..\:/programlama/Kotlin_Projeleri/MyRecipeBook/app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.2505" />
         <entry key="..\:/programlama/Kotlin_Projeleri/MyRecipeBook/app/src/main/res/layout/activity_art.xml" value="0.36666666666666664" />
-        <entry key="..\:/programlama/Kotlin_Projeleri/MyRecipeBook/app/src/main/res/layout/activity_main.xml" value="0.35260416666666666" />
-        <entry key="..\:/programlama/Kotlin_Projeleri/MyRecipeBook/app/src/main/res/layout/activity_recipe.xml" value="0.264" />
+        <entry key="..\:/programlama/Kotlin_Projeleri/MyRecipeBook/app/src/main/res/layout/activity_main.xml" value="0.26145833333333335" />
+        <entry key="..\:/programlama/Kotlin_Projeleri/MyRecipeBook/app/src/main/res/layout/activity_recipe.xml" value="1.162037037037037" />
         <entry key="..\:/programlama/Kotlin_Projeleri/MyRecipeBook/app/src/main/res/layout/recycler_row.xml" value="0.35104166666666664" />
         <entry key="..\:/programlama/Kotlin_Projeleri/MyRecipeBook/app/src/main/res/menu/recipe_menu.xml" value="0.36666666666666664" />
+        <entry key="..\:/programlama/Kotlin_Projeleri/MyRecipeBook/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.2505" />
       </map>
     </option>
   </component>
